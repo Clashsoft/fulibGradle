@@ -1,0 +1,53 @@
+plugins {
+	id 'java-gradle-plugin'
+	id 'groovy'
+	id 'com.gradle.plugin-publish' version '0.10.1'
+}
+
+apply from: 'gradle/integration-test.gradle'
+apply from: 'gradle/functional-test.gradle'
+
+group 'org.fulib'
+version '0.1.0'
+description 'The Fulib Gradle Plugin.'
+
+pluginBundle {
+	website = 'https://github.com/fujaba/fulibGradle'
+	vcsUrl = 'https://github.com/fujaba/fulibGradle'
+	description = project.description
+	tags = [ 'generate', 'fulib' ]
+
+	plugins {
+		fulibGradle {
+			displayName = 'fulib'
+		}
+	}
+
+	mavenCoordinates {
+		groupId = project.group
+		artifactId = project.name
+		version = project.version
+	}
+}
+
+gradlePlugin {
+	plugins {
+		fulibGradle {
+			id = "${project.group}.${project.name}"
+			implementationClass = 'org.fulib.gradle.FulibGradlePlugin'
+		}
+	}
+}
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	// https://mvnrepository.com/artifact/junit/junit
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+
+	testCompile(group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4') {
+		exclude group: 'org.codehaus.groovy'
+	}
+}
