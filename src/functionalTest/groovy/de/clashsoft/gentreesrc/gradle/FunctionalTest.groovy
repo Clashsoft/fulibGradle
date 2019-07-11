@@ -1,56 +1,49 @@
 package de.clashsoft.gentreesrc.gradle
 
 import groovy.io.FileType
+import groovy.transform.CompileStatic
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static org.gradle.testkit.runner.TaskOutcome.*
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class FunctionalTest extends Specification {
+	static String[] TEST_FILES = [
+			'build.gradle',
+			'settings.gradle',
+			'src/main/scenarios/com/example/Foo.md',
+			'src/test/scenarios/org/example/Baz.md',
+	]
+
 	@Rule
 	TemporaryFolder testProjectDir = new TemporaryFolder()
 
-	def setup() {
-		testProjectDir.newFile('settings.gradle') << /* language=Groovy */ """
-		rootProject.name = 'test'
-		"""
+	@CompileStatic
+	void setup() {
+		final Path rootPath = testProjectDir.root.toPath()
+		for (final String fileName : TEST_FILES) {
+			final Path source = Paths.get("src/functionalTest/testfiles", fileName)
+			final Path target = rootPath.resolve(fileName)
 
-		testProjectDir.newFile('build.gradle') << /* language=Groovy */ """
-		plugins {
-			id 'java'
-			id 'org.fulib.fulibGradle'
-		}
-		
-		repositories {
-			jcenter()
-		}
-		
-		dependencies {
-			fulibScenarios group: 'org.fulib', name: 'fulibScenarios', version: '0.3.2'
-			
-			// https://mvnrepository.com/artifact/junit/junit
-			testCompile group: 'junit', name: 'junit', version: '4.12'
-		}
-		"""
+			Files.createDirectories(target.parent)
 
-		testProjectDir.newFolder('src', 'main', 'scenarios', 'com', 'example')
-		testProjectDir.newFile('src/main/scenarios/com/example/Foo.md') << /* language=markdown */ """
-		# Scenario Bar.
-		
-		There is a Car with name Herbie.
-		"""
-
-		testProjectDir.newFolder('src', 'test', 'scenarios', 'org', 'example')
-		testProjectDir.newFile('src/test/scenarios/org/example/Baz.md') << /* language=markdown */ """
-		# Scenario Boo.
-		
-		There is a City with name LA.
-		"""
+			try {
+				Files.createLink(target, source)
+			}
+			catch (UnsupportedOperationException ignored) {
+				Files.copy(source, target)
+			}
+		}
 	}
 
+	@CompileStatic
 	BuildResult run() {
 		try {
 			BuildResult result = GradleRunner.create()
