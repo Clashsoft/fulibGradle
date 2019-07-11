@@ -89,9 +89,14 @@ class FulibGradlePlugin implements Plugin<Project> {
 	}
 
 	static void configureTask(JavaExec it, File inputDir, File modelDir, File testDir) {
+		final File workingDir = it.workingDir
+		final String relInputDir = workingDir.relativePath(inputDir)
+		final String relModelDir = workingDir.relativePath(modelDir)
+		final String relTestDir = workingDir.relativePath(testDir)
+
 		it.classpath = it.project.configurations.getByName(CONFIGURATION_NAME)
 		it.main = MAIN_CLASS_NAME
-		it.args = [ '-m', modelDir.toString(), '-t', testDir.toString(), inputDir.toString() ]
+		it.args = [ '-m', relModelDir, '-t', relTestDir, relInputDir ]
 
 		it.inputs.dir(inputDir)
 		it.outputs.dir(modelDir)
