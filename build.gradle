@@ -8,7 +8,7 @@ apply from: 'gradle/integration-test.gradle'
 apply from: 'gradle/functional-test.gradle'
 
 group 'org.fulib'
-version '0.1.0'
+version 'git describe --tags'.execute().text[1..-2] // strip v and \n
 description 'The Fulib Gradle Plugin.'
 
 pluginBundle {
