@@ -39,36 +39,32 @@ class FulibGradlePlugin implements Plugin<Project> {
 			}
 		}
 
-		SourceSetContainer sourceSets = project.convention.getPlugin(JavaPluginConvention).sourceSets
-		SourceSet main = sourceSets.getByName('main')
-		SourceSet test = sourceSets.getByName('test')
+		final SourceSetContainer sourceSets = project.convention.getPlugin(JavaPluginConvention).sourceSets
+		final SourceSet main = sourceSets.getByName('main')
+		final SourceSet test = sourceSets.getByName('test')
 		configureSourceSet(project, main, test)
 		configureSourceSet(project, test, test)
 	}
 
 	static void configureSourceSet(Project project, SourceSet main, SourceSet test) {
+		final File srcDir = project.file("src/$main.name/$SRC_DIR_NAME")
+		final String taskName = main.getTaskName(TASK_VERB, TASK_TARGET)
+		final File modelDir = project.file("src/$main.name/java")
+		final File testDir = project.file("src/$test.name/java")
+
 		// for each source set we will:
 		// 1) Add a new 'scenarios' virtual directory mapping
-
-		final String srcDirName = "src/$main.name/$SRC_DIR_NAME"
-		final File srcDir = project.file(srcDirName)
 
 		final ScenariosVirtualDirectoryImpl directoryDelegate = new ScenariosVirtualDirectoryImpl((
 				(DefaultSourceSet) main).displayName, project.objects)
 
-		new DslObject(main).convention.plugins.put(SRC_DIR_NAME, directoryDelegate)
+		new DslObject(main).convention.plugins[SRC_DIR_NAME] = directoryDelegate
 
-		directoryDelegate.scenarios.srcDir(srcDirName)
+		directoryDelegate.scenarios.srcDir(srcDir)
 
 		main.allSource.source(directoryDelegate.scenarios)
 
 		// 2) create a task for this sourceSet following the gradle naming conventions
-
-		final String taskName = main.getTaskName(TASK_VERB, TASK_TARGET)
-		final String modelDirName = "src/$main.name/java"
-		final String testDirName = "src/$test.name/java"
-		final File modelDir = project.file(modelDirName)
-		final File testDir = project.file(testDirName)
 
 		project.tasks.register(taskName, JavaExec) {
 			configureTask(it, srcDir, modelDir, testDir)
@@ -78,7 +74,7 @@ class FulibGradlePlugin implements Plugin<Project> {
 		// main.java.srcDir(modelDir)
 		// test.java.srcDir(testDir)
 
-		// 5) register fact that scenarioc should be run before compiling
+		// 4) register fact that scenarioc should be run before compiling
 		project.tasks.named(main.compileJavaTaskName) { Task it ->
 			it.dependsOn taskName
 		}
