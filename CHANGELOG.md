@@ -7,3 +7,8 @@
 # Fulib Gradle v0.1.1
 
 * The tool is now invoked with relative paths. #3
+
+# Fulib Gradle v0.2.0
+
++ Added a custom `Task` subtype for Scenario tasks. #4
+* Scenario tasks are no longer debuggable. #5
