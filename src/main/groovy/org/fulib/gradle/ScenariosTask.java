@@ -22,7 +22,7 @@ public class ScenariosTask extends DefaultTask
 	private File inputDirectory;
 
 	private FileCollection classpath;
-	private List<String>   imports;
+	private List<String>   imports = new ArrayList<>();
 
 	private boolean classDiagram;
 	private boolean classDiagramSVG;
@@ -81,6 +81,7 @@ public class ScenariosTask extends DefaultTask
 
 	// --------------- Options ---------------
 
+	@Optional
 	@Classpath
 	public FileCollection getClasspath()
 	{
@@ -204,15 +205,17 @@ public class ScenariosTask extends DefaultTask
 
 			final List<String> args = new ArrayList<>(this.getExtraArgs());
 
-			if (!this.getClasspath().isEmpty())
+			final FileCollection classpath = this.getClasspath();
+			if (classpath != null && !classpath.isEmpty())
 			{
 				args.add("--classpath");
-				args.add(this.getClasspath().getAsPath());
+				args.add(classpath.getAsPath());
 			}
-			if (!this.getImports().isEmpty())
+			final List<String> imports = this.getImports();
+			if (!imports.isEmpty())
 			{
 				args.add("--imports");
-				args.add(String.join(",", this.getImports()));
+				args.add(String.join(",", imports));
 			}
 			if (this.isClassDiagram())
 			{
