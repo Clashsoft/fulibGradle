@@ -1,7 +1,6 @@
 package org.fulib.gradle
 
 import org.gradle.api.Project
-import org.gradle.api.tasks.JavaExec
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Before
 import org.junit.Test
@@ -32,8 +31,8 @@ class FulibGradlePluginTest {
 
 	@Test
 	void addsTasks() {
-		assertThat(project.tasks.generateScenarioSource, instanceOf(JavaExec))
-		assertThat(project.tasks.generateTestScenarioSource, instanceOf(JavaExec))
+		assertThat(project.tasks.generateScenarioSource, notNullValue())
+		assertThat(project.tasks.generateTestScenarioSource, notNullValue())
 	}
 
 	@Test
