@@ -24,6 +24,12 @@ public class ScenariosTask extends DefaultTask
 	private FileCollection classpath;
 	private List<String>   imports;
 
+	private boolean classDiagram;
+	private boolean classDiagramSVG;
+
+	private boolean objectDiagram;
+	private boolean objectDiagramSVG;
+
 	private List<String> extraArgs = new ArrayList<>();
 
 	// =============== Properties ===============
@@ -113,6 +119,50 @@ public class ScenariosTask extends DefaultTask
 		}
 	}
 
+	@Input
+	public boolean isClassDiagram()
+	{
+		return this.classDiagram;
+	}
+
+	public void setClassDiagram(boolean classDiagram)
+	{
+		this.classDiagram = classDiagram;
+	}
+
+	@Input
+	public boolean isClassDiagramSVG()
+	{
+		return this.classDiagramSVG;
+	}
+
+	public void setClassDiagramSVG(boolean classDiagramSVG)
+	{
+		this.classDiagramSVG = classDiagramSVG;
+	}
+
+	@Input
+	public boolean isObjectDiagram()
+	{
+		return this.objectDiagram;
+	}
+
+	public void setObjectDiagram(boolean objectDiagram)
+	{
+		this.objectDiagram = objectDiagram;
+	}
+
+	@Input
+	public boolean isObjectDiagramSVG()
+	{
+		return this.objectDiagramSVG;
+	}
+
+	public void setObjectDiagramSVG(boolean objectDiagramSVG)
+	{
+		this.objectDiagramSVG = objectDiagramSVG;
+	}
+
 	// --------------- Extra Args ---------------
 
 	@Input
@@ -164,9 +214,24 @@ public class ScenariosTask extends DefaultTask
 				args.add("--imports");
 				args.add(String.join(",", this.getImports()));
 			}
+			if (this.isClassDiagram())
+			{
+				args.add("--class-diagram");
+			}
+			if (this.isClassDiagramSVG())
+			{
+				args.add("--class-diagram-svg");
+			}
+			if (this.isObjectDiagram())
+			{
+				args.add("--object-diagram");
+			}
+			if (this.isObjectDiagramSVG())
+			{
+				args.add("--object-diagram-svg");
+			}
 
 			args.add("-m");
-
 			args.add(relativePath(spec.getWorkingDir(), this.getModelDirectory()));
 			args.add("-t");
 			args.add(relativePath(spec.getWorkingDir(), this.getTestDirectory()));
