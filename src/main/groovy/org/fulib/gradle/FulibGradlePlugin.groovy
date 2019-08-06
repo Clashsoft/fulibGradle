@@ -12,7 +12,6 @@ import org.gradle.api.internal.plugins.DslObject
 import org.gradle.api.internal.tasks.DefaultSourceSet
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
-import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 
@@ -69,9 +68,15 @@ class FulibGradlePlugin implements Plugin<Project> {
 
 		// 2) create a task for this sourceSet following the gradle naming conventions
 
-		project.tasks.register(taskName, JavaExec) {
-			configureTask(it, srcDir, modelDir, testDir)
-		}
+		project.tasks.register(taskName, ScenariosTask, { ScenariosTask it ->
+			it.description = "Compiles the $main.name Scenario files."
+
+			// 4) set up convention mapping for default sources (allows user to not have to specify)
+			it.modelDirectory = modelDir
+			it.testDirectory = testDir
+			it.inputDirectory = srcDir
+			it.toolClasspath = project.configurations.getByName(CONFIGURATION_NAME)
+		} as Action<ScenariosTask>)
 
 		// 3) Set up the scenarios output directory (adding to javac inputs!)
 		// main.java.srcDir(modelDir)
@@ -85,21 +90,5 @@ class FulibGradlePlugin implements Plugin<Project> {
 		project.tasks.named(test.compileJavaTaskName) { Task it ->
 			it.dependsOn taskName
 		}
-	}
-
-	static void configureTask(JavaExec it, File inputDir, File modelDir, File testDir) {
-		final File workingDir = it.workingDir
-		final String relInputDir = workingDir.relativePath(inputDir)
-		final String relModelDir = workingDir.relativePath(modelDir)
-		final String relTestDir = workingDir.relativePath(testDir)
-
-		it.classpath = it.project.configurations.getByName(CONFIGURATION_NAME)
-		it.main = MAIN_CLASS_NAME
-		it.args = [ '-m', relModelDir, '-t', relTestDir, relInputDir ]
-
-		it.inputs.dir(inputDir)
-		it.outputs.dir(modelDir)
-
-		it.onlyIf { inputDir.exists() }
 	}
 }
