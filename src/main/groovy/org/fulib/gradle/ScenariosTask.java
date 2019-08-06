@@ -21,6 +21,9 @@ public class ScenariosTask extends DefaultTask
 	private File testDirectory;
 	private File inputDirectory;
 
+	private FileCollection classpath;
+	private List<String>   imports;
+
 	private List<String> extraArgs = new ArrayList<>();
 
 	// =============== Properties ===============
@@ -72,6 +75,44 @@ public class ScenariosTask extends DefaultTask
 
 	// --------------- Options ---------------
 
+	@Classpath
+	public FileCollection getClasspath()
+	{
+		return this.classpath;
+	}
+
+	public void setClasspath(FileCollection classpath)
+	{
+		this.classpath = classpath;
+	}
+
+	@Input
+	public List<String> getImports()
+	{
+		return this.imports;
+	}
+
+	public void setImports(List<String> imports)
+	{
+		this.imports = imports;
+	}
+
+	public void imports(Object... imports)
+	{
+		for (final Object anImport : imports)
+		{
+			this.imports.add(anImport.toString());
+		}
+	}
+
+	public void imports(Iterable<?> imports)
+	{
+		for (final Object anImport : imports)
+		{
+			this.imports.add(anImport.toString());
+		}
+	}
+
 	// --------------- Extra Args ---------------
 
 	@Input
@@ -112,6 +153,17 @@ public class ScenariosTask extends DefaultTask
 			spec.setMain(FulibGradlePlugin.MAIN_CLASS_NAME);
 
 			final List<String> args = new ArrayList<>(this.getExtraArgs());
+
+			if (!this.getClasspath().isEmpty())
+			{
+				args.add("--classpath");
+				args.add(this.getClasspath().getAsPath());
+			}
+			if (!this.getImports().isEmpty())
+			{
+				args.add("--imports");
+				args.add(String.join(",", this.getImports()));
+			}
 
 			args.add("-m");
 
