@@ -3,6 +3,7 @@ package org.fulib.gradle;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.tasks.*;
+import org.gradle.process.JavaExecSpec;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -199,49 +200,64 @@ public class ScenariosTask extends DefaultTask
 	@TaskAction
 	public void execute()
 	{
-		this.getProject().javaexec(spec -> {
-			spec.setClasspath(this.getToolClasspath());
-			spec.setMain(FulibGradlePlugin.MAIN_CLASS_NAME);
+		this.getProject().javaexec(this::copyTo);
+	}
 
-			final List<String> args = new ArrayList<>(this.getExtraArgs());
+	public void copyTo(JavaExecSpec spec)
+	{
+		spec.setClasspath(this.getToolClasspath());
+		spec.setMain(FulibGradlePlugin.MAIN_CLASS_NAME);
 
-			final FileCollection classpath = this.getClasspath();
-			if (classpath != null && !classpath.isEmpty())
-			{
-				args.add("--classpath");
-				args.add(classpath.getAsPath());
-			}
-			final List<String> imports = this.getImports();
-			if (!imports.isEmpty())
-			{
-				args.add("--imports");
-				args.add(String.join(",", imports));
-			}
-			if (this.isClassDiagram())
-			{
-				args.add("--class-diagram");
-			}
-			if (this.isClassDiagramSVG())
-			{
-				args.add("--class-diagram-svg");
-			}
-			if (this.isObjectDiagram())
-			{
-				args.add("--object-diagram");
-			}
-			if (this.isObjectDiagramSVG())
-			{
-				args.add("--object-diagram-svg");
-			}
+		final List<String> args = new ArrayList<>(this.getExtraArgs());
 
-			args.add("-m");
-			args.add(relativePath(spec.getWorkingDir(), this.getModelDirectory()));
-			args.add("-t");
-			args.add(relativePath(spec.getWorkingDir(), this.getTestDirectory()));
-			args.add("--");
-			args.add(relativePath(spec.getWorkingDir(), this.getInputDirectory()));
+		final FileCollection classpath = this.getClasspath();
+		if (classpath != null && !classpath.isEmpty())
+		{
+			args.add("--classpath");
+			args.add(classpath.getAsPath());
+		}
+		final List<String> imports = this.getImports();
+		if (!imports.isEmpty())
+		{
+			args.add("--imports");
+			args.add(String.join(",", imports));
+		}
+		if (this.isClassDiagram())
+		{
+			args.add("--class-diagram");
+		}
+		if (this.isClassDiagramSVG())
+		{
+			args.add("--class-diagram-svg");
+		}
+		if (this.isObjectDiagram())
+		{
+			args.add("--object-diagram");
+		}
+		if (this.isObjectDiagramSVG())
+		{
+			args.add("--object-diagram-svg");
+		}
 
-			spec.setArgs(args);
-		});
+		args.add("-m");
+		args.add(relativePath(spec.getWorkingDir(), this.getModelDirectory()));
+		args.add("-t");
+		args.add(relativePath(spec.getWorkingDir(), this.getTestDirectory()));
+		args.add("--");
+		args.add(relativePath(spec.getWorkingDir(), this.getInputDirectory()));
+
+		spec.setArgs(args);
+	}
+
+	public void copyTo(JavaExec exec)
+	{
+		this.copyTo((JavaExecSpec) exec);
+
+		exec.onlyIf(t -> this.getInputDirectory().exists());
+
+		exec.getInputs().dir(this.getInputDirectory());
+		exec.getInputs().files(this.getClasspath());
+		exec.getOutputs().dir(this.getModelDirectory());
+		exec.getOutputs().dir(this.getTestDirectory());
 	}
 }
