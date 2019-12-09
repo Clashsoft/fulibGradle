@@ -24,7 +24,11 @@ public class FulibGradlePlugin implements Plugin<Project>
 	public void apply(Project project)
 	{
 		project.getPluginManager().apply(JavaPlugin.class);
+		applyFulibScenarios(project);
+	}
 
+	private static void applyFulibScenarios(Project project)
+	{
 		// configuration
 		project.getConfigurations().register(CONFIGURATION_NAME, it -> {
 			it.setDescription("The Fulib Scenarios libraries to use for this project.");
@@ -47,7 +51,7 @@ public class FulibGradlePlugin implements Plugin<Project>
 		configureSourceSet(project, test, test);
 	}
 
-	static void configureSourceSet(Project project, SourceSet main, SourceSet test)
+	private static void configureSourceSet(Project project, SourceSet main, SourceSet test)
 	{
 		final File srcDir = project.file("src/" + main.getName() + "/" + SRC_DIR_NAME);
 		final String taskName = main.getTaskName(TASK_VERB, TASK_TARGET);
