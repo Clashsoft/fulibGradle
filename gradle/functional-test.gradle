@@ -23,3 +23,9 @@ check.dependsOn 'functionalTest'
 gradlePlugin {
 	testSourceSets sourceSets.functionalTest
 }
+
+// extras
+
+tasks.named('functionalTest') {
+	it.inputs.dir 'src/functionalTest/testfiles'
+}
