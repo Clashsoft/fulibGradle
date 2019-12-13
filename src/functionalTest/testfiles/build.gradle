@@ -12,6 +12,8 @@ repositories {
 dependencies {
 	fulibScenarios group: 'org.fulib', name: 'fulibScenarios', version: '+'
 
+	genCompile group: 'org.fulib', name: 'fulib', version: '+'
+
 	// https://mvnrepository.com/artifact/junit/junit
 	testCompile group: 'junit', name: 'junit', version: '4.12'
 }
