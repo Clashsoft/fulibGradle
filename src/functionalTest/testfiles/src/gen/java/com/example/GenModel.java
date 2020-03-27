@@ -1,5 +1,6 @@
 package com.example;
 
+import org.fulib.classmodel.Clazz;
 import org.fulib.builder.ClassModelDecorator;
 import org.fulib.builder.ClassModelManager;
 
@@ -9,7 +10,10 @@ public class GenModel implements ClassModelDecorator
 	public void decorate(ClassModelManager m)
 	{
 		// class SuperCar extends Car
-		m.haveClass("SuperCar", m.haveClass("Car"), c -> {});
+
+		Clazz car = m.haveClass("Car");
+		Clazz superCar = m.haveClass("SuperCar");
+		superCar.setSuperClass(car);
 
 		System.out.println(">>>>>>>>>>>>>>> decorated! <<<<<<<<<<<<<<<");
 	}
