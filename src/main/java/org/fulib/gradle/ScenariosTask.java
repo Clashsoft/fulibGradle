@@ -23,7 +23,8 @@ public class ScenariosTask extends DefaultTask
 	private File inputDirectory;
 
 	private FileCollection classpath;
-	private List<String>   imports = new ArrayList<>();
+	private List<String> imports = new ArrayList<>();
+	private FileCollection decoratorJavaFiles;
 
 	private boolean classDiagram;
 	private boolean classDiagramSVG;
@@ -103,6 +104,17 @@ public class ScenariosTask extends DefaultTask
 	public void setImports(List<String> imports)
 	{
 		this.imports = imports;
+	}
+
+	@InputFiles
+	public FileCollection getDecoratorJavaFiles()
+	{
+		return this.decoratorJavaFiles;
+	}
+
+	public void setDecoratorJavaFiles(FileCollection decoratorJavaFiles)
+	{
+		this.decoratorJavaFiles = decoratorJavaFiles;
 	}
 
 	public void imports(Object... imports)
@@ -222,6 +234,13 @@ public class ScenariosTask extends DefaultTask
 			args.add("--imports");
 			args.add(String.join(",", imports));
 		}
+		final List<String> decoratorClassNames = this.getDecoratorClassNames();
+		if (!decoratorClassNames.isEmpty())
+		{
+			args.add("--decorator-classes");
+			System.out.println(decoratorClassNames);
+			args.add(String.join(",", decoratorClassNames));
+		}
 		if (this.isClassDiagram())
 		{
 			args.add("--class-diagram");
@@ -247,6 +266,30 @@ public class ScenariosTask extends DefaultTask
 		args.add(relativePath(spec.getWorkingDir(), this.getInputDirectory()));
 
 		spec.setArgs(args);
+	}
+
+	private List<String> getDecoratorClassNames()
+	{
+		final List<String> result = new ArrayList<>();
+		this.decoratorJavaFiles.getAsFileTree().visit(details -> {
+			if (!details.isDirectory())
+			{
+				final String relativePath = details.getRelativePath().toString();
+				final String className = fileToClassName(relativePath);
+				result.add(className);
+			}
+		});
+		return result;
+	}
+
+	private static String fileToClassName(String path)
+	{
+		final int dotIndex = path.lastIndexOf('.');
+		if (dotIndex >= 0)
+		{
+			path = path.substring(0, dotIndex);
+		}
+		return path.replace(File.separatorChar, '.');
 	}
 
 	public void copyTo(JavaExec exec)

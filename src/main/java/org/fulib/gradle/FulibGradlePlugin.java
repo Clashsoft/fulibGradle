@@ -80,6 +80,7 @@ public class FulibGradlePlugin implements Plugin<Project>
 			it.setModelDirectory(modelDir);
 			it.setTestDirectory(testDir);
 			it.setInputDirectory(srcDir);
+			it.setDecoratorJavaFiles(gen.getAllJava());
 			it.setToolClasspath(project.getConfigurations().getByName(CONFIGURATION_NAME).plus(gen.getRuntimeClasspath()));
 		});
 
