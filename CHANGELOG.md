@@ -12,3 +12,8 @@
 
 + Added a custom `Task` subtype for Scenario tasks. #4
 * Scenario tasks are no longer debuggable. #5
+
+# Fulib Gradle v0.3.0
+
++ Added the `ScenariosTask.copyTo` methods that allow converting them to debuggable `JavaExec` tasks.
+* The plugin is now implemented with Java instead of Groovy.

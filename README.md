@@ -12,10 +12,10 @@ and can be installed via the `plugins` DSL in `build.gradle`:
 
 ```groovy
 plugins {
-	// ...
-	id 'java'
-	id 'org.fulib.fulibGradle' version '0.2.0'
-	// ...
+    // ...
+    id 'java'
+    id 'org.fulib.fulibGradle' version '0.3.0'
+    // ...
 }
 ```
 
