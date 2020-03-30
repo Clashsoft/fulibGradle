@@ -18,6 +18,8 @@ class FunctionalTest extends Specification {
 	static String[] TEST_FILES = [
 			'build.gradle',
 			'settings.gradle',
+			'src/gen/java/com/example/CarModel.java',
+			'src/gen/java/com/example2/PlaneModel.java',
 			'src/main/scenarios/com/example/Foo.md',
 			'src/test/scenarios/org/example/Baz.md',
 	]
@@ -74,6 +76,8 @@ class FunctionalTest extends Specification {
 
 		def mainOutputDir = new File(testProjectDir.root, "src/main/java/")
 		new File(mainOutputDir, 'com/example/Car.java').exists()
+		new File(mainOutputDir, 'com/example/SuperCar.java').exists()
+		new File(mainOutputDir, 'com/example2/Plane.java').exists()
 
 		def testOutputDir = new File(testProjectDir.root, "src/test/java/")
 		new File(testOutputDir, 'com/example/FooTest.java').exists()

@@ -45,13 +45,15 @@ public class FulibGradlePlugin implements Plugin<Project>
 
 		final SourceSetContainer sourceSets = project.getConvention().getPlugin(JavaPluginConvention.class)
 		                                             .getSourceSets();
+		final SourceSet gen = sourceSets.create("gen");
+		final SourceSet testGen = sourceSets.create("testGen");
 		final SourceSet main = sourceSets.getByName("main");
 		final SourceSet test = sourceSets.getByName("test");
-		configureSourceSet(project, main, test);
-		configureSourceSet(project, test, test);
+		configureSourceSet(project, gen, main, test);
+		configureSourceSet(project, testGen, test, test);
 	}
 
-	private static void configureSourceSet(Project project, SourceSet main, SourceSet test)
+	private static void configureSourceSet(Project project, SourceSet gen, SourceSet main, SourceSet test)
 	{
 		final File srcDir = project.file("src/" + main.getName() + "/" + SRC_DIR_NAME);
 		final String taskName = main.getTaskName(TASK_VERB, TASK_TARGET);
@@ -79,7 +81,8 @@ public class FulibGradlePlugin implements Plugin<Project>
 			it.setModelDirectory(modelDir);
 			it.setTestDirectory(testDir);
 			it.setInputDirectory(srcDir);
-			it.setToolClasspath(project.getConfigurations().getByName(CONFIGURATION_NAME));
+			it.setDecoratorJavaFiles(gen.getAllJava());
+			it.setToolClasspath(project.getConfigurations().getByName(CONFIGURATION_NAME).plus(gen.getRuntimeClasspath()));
 		});
 
 		// 4) Set up the scenarios output directory (adding to javac inputs!)

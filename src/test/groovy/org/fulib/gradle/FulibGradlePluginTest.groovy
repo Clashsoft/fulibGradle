@@ -27,6 +27,8 @@ class FulibGradlePluginTest {
 	void addsSourceSets() {
 		assertThat(project.sourceSets.main.scenarios, notNullValue())
 		assertThat(project.sourceSets.test.scenarios, notNullValue())
+		assertThat(project.sourceSets.gen, notNullValue())
+		assertThat(project.sourceSets.testGen, notNullValue())
 	}
 
 	@Test
