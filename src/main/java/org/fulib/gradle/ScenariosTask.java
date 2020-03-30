@@ -26,11 +26,15 @@ public class ScenariosTask extends DefaultTask
 	private List<String> imports = new ArrayList<>();
 	private FileCollection decoratorJavaFiles;
 
+	private boolean tables;
+
 	private boolean classDiagram;
 	private boolean classDiagramSVG;
 
 	private boolean objectDiagram;
 	private boolean objectDiagramSVG;
+
+	private boolean dryRun;
 
 	private List<String> extraArgs = new ArrayList<>();
 
@@ -134,6 +138,17 @@ public class ScenariosTask extends DefaultTask
 	}
 
 	@Input
+	public boolean isTables()
+	{
+		return this.tables;
+	}
+
+	public void setTables(boolean tables)
+	{
+		this.tables = tables;
+	}
+
+	@Input
 	public boolean isClassDiagram()
 	{
 		return this.classDiagram;
@@ -175,6 +190,17 @@ public class ScenariosTask extends DefaultTask
 	public void setObjectDiagramSVG(boolean objectDiagramSVG)
 	{
 		this.objectDiagramSVG = objectDiagramSVG;
+	}
+
+	@Input
+	public boolean isDryRun()
+	{
+		return this.dryRun;
+	}
+
+	public void setDryRun(boolean dryRun)
+	{
+		this.dryRun = dryRun;
 	}
 
 	// --------------- Extra Args ---------------
@@ -241,6 +267,10 @@ public class ScenariosTask extends DefaultTask
 			System.out.println(decoratorClassNames);
 			args.add(String.join(",", decoratorClassNames));
 		}
+		if (this.isTables())
+		{
+			args.add("--tables");
+		}
 		if (this.isClassDiagram())
 		{
 			args.add("--class-diagram");
@@ -256,6 +286,10 @@ public class ScenariosTask extends DefaultTask
 		if (this.isObjectDiagramSVG())
 		{
 			args.add("--object-diagram-svg");
+		}
+		if (this.isDryRun())
+		{
+			args.add("--dry-run");
 		}
 
 		args.add("-m");
