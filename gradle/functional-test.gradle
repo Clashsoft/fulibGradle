@@ -26,6 +26,8 @@ gradlePlugin {
 
 // extras
 
-tasks.named('functionalTest') {
+tasks.named('functionalTest', Test) {
+	it.testLogging.showStandardStreams = true
+	it.testLogging.exceptionFormat = 'FULL'
 	it.inputs.dir 'src/functionalTest/testfiles'
 }
