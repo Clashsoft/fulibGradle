@@ -111,6 +111,7 @@ public class ScenariosTask extends DefaultTask
 	}
 
 	@InputFiles
+	@SkipWhenEmpty
 	public FileCollection getDecoratorJavaFiles()
 	{
 		return this.decoratorJavaFiles;
