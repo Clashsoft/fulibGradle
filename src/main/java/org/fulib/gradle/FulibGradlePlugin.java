@@ -46,10 +46,11 @@ public class FulibGradlePlugin implements Plugin<Project>
 		final SourceSetContainer sourceSets = project.getConvention().getPlugin(JavaPluginConvention.class)
 		                                             .getSourceSets();
 		final SourceSet gen = sourceSets.create("gen");
+		final SourceSet testGen = sourceSets.create("testGen");
 		final SourceSet main = sourceSets.getByName("main");
 		final SourceSet test = sourceSets.getByName("test");
 		configureSourceSet(project, gen, main, test);
-		configureSourceSet(project, gen, test, test);
+		configureSourceSet(project, testGen, test, test);
 	}
 
 	private static void configureSourceSet(Project project, SourceSet gen, SourceSet main, SourceSet test)
