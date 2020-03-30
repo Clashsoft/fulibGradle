@@ -309,22 +309,17 @@ public class ScenariosTask extends DefaultTask
 		this.decoratorJavaFiles.getAsFileTree().visit(details -> {
 			if (!details.isDirectory())
 			{
-				final String relativePath = details.getRelativePath().toString();
-				final String className = fileToClassName(relativePath);
+				String path = details.getRelativePath().toString();
+				final int dotIndex = path.lastIndexOf('.');
+				if (dotIndex >= 0)
+				{
+					path = path.substring(0, dotIndex);
+				}
+				final String className = path.replace('/', '.');
 				result.add(className);
 			}
 		});
 		return result;
-	}
-
-	private static String fileToClassName(String path)
-	{
-		final int dotIndex = path.lastIndexOf('.');
-		if (dotIndex >= 0)
-		{
-			path = path.substring(0, dotIndex);
-		}
-		return path.replace(File.separatorChar, '.');
 	}
 
 	public void copyTo(JavaExec exec)
