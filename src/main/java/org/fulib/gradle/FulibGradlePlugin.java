@@ -3,6 +3,7 @@ package org.fulib.gradle;
 import org.fulib.gradle.internal.ScenariosVirtualDirectoryImpl;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.internal.plugins.DslObject;
 import org.gradle.api.internal.tasks.DefaultSourceSet;
 import org.gradle.api.plugins.JavaPlugin;
@@ -30,7 +31,8 @@ public class FulibGradlePlugin implements Plugin<Project>
 	private static void applyFulibScenarios(Project project)
 	{
 		// configuration
-		project.getConfigurations().register(CONFIGURATION_NAME, it -> {
+		final ConfigurationContainer configurations = project.getConfigurations();
+		configurations.register(CONFIGURATION_NAME, it -> {
 			it.setDescription("The Fulib Scenarios libraries to use for this project.");
 			it.setVisible(false);
 			it.getResolutionStrategy().eachDependency(details -> {
@@ -49,8 +51,16 @@ public class FulibGradlePlugin implements Plugin<Project>
 		final SourceSet testGen = sourceSets.create("testGen");
 		final SourceSet main = sourceSets.getByName("main");
 		final SourceSet test = sourceSets.getByName("test");
+
 		configureSourceSet(project, gen, main, test);
 		configureSourceSet(project, testGen, test, test);
+
+		configurations.named(gen.getImplementationConfigurationName(), it -> {
+			it.extendsFrom(configurations.getByName(CONFIGURATION_NAME));
+		});
+		configurations.named(testGen.getImplementationConfigurationName(), it -> {
+			it.extendsFrom(configurations.getByName(CONFIGURATION_NAME));
+		});
 	}
 
 	private static void configureSourceSet(Project project, SourceSet gen, SourceSet main, SourceSet test)
