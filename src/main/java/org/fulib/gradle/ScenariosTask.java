@@ -265,7 +265,6 @@ public class ScenariosTask extends DefaultTask
 		if (!decoratorClassNames.isEmpty())
 		{
 			args.add("--decorator-classes");
-			System.out.println(decoratorClassNames);
 			args.add(String.join(",", decoratorClassNames));
 		}
 		if (this.isTables())
