@@ -96,7 +96,7 @@ public class FulibGradlePlugin implements Plugin<Project>
 			it.setTestDirectory(testDir);
 			it.setInputDirectory(srcDir);
 			it.setDecoratorJavaFiles(gen.getAllJava());
-			it.setToolClasspath(project.getConfigurations().getByName(CONFIGURATION_NAME).plus(gen.getRuntimeClasspath()));
+			it.setToolClasspath(gen.getRuntimeClasspath());
 		});
 
 		// 4) Set up the scenarios output directory (adding to javac inputs!)
