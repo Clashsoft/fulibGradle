@@ -47,19 +47,23 @@ public class FulibGradlePlugin implements Plugin<Project>
 
 		final SourceSetContainer sourceSets = project.getConvention().getPlugin(JavaPluginConvention.class)
 		                                             .getSourceSets();
-		final SourceSet gen = sourceSets.create("gen");
-		final SourceSet testGen = sourceSets.create("testGen");
+
 		final SourceSet main = sourceSets.getByName("main");
 		final SourceSet test = sourceSets.getByName("test");
 
-		configureSourceSet(project, gen, main, test);
-		configureSourceSet(project, testGen, test, test);
+		sourceSets.register("gen", gen -> {
+			configureSourceSet(project, gen, main, test);
 
-		configurations.named(gen.getImplementationConfigurationName(), it -> {
-			it.extendsFrom(configurations.getByName(CONFIGURATION_NAME));
+			configurations.named(gen.getImplementationConfigurationName(), genCompile -> {
+				genCompile.extendsFrom(configurations.getByName(CONFIGURATION_NAME));
+			});
 		});
-		configurations.named(testGen.getImplementationConfigurationName(), it -> {
-			it.extendsFrom(configurations.getByName(CONFIGURATION_NAME));
+		sourceSets.register("testGen", testGen -> {
+			configureSourceSet(project, testGen, test, test);
+
+			configurations.named(testGen.getImplementationConfigurationName(), testGenCompile -> {
+				testGenCompile.extendsFrom(configurations.getByName(CONFIGURATION_NAME));
+			});
 		});
 	}
 

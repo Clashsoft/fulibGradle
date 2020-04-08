@@ -21,6 +21,12 @@ class FulibGradlePluginTest {
 	@Test
 	void addsConfiguration() {
 		assertThat(project.configurations.fulibScenarios, notNullValue())
+		assertThat(project.configurations.genImplementation, notNullValue())
+		assertThat(project.configurations.genImplementation.extendsFrom, hasItem(project.configurations
+				.fulibScenarios))
+		assertThat(project.configurations.testGenImplementation, notNullValue())
+		assertThat(project.configurations.testGenImplementation.extendsFrom, hasItem(project.configurations
+				.fulibScenarios))
 	}
 
 	@Test
