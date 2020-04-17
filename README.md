@@ -14,10 +14,16 @@ and can be installed via the `plugins` DSL in `build.gradle`:
 plugins {
     // ...
     id 'java'
-    id 'org.fulib.fulibGradle' version '0.3.0'
+    id 'org.fulib.fulibGradle' version '0.4.0'
     // ...
 }
 ```
 
 See the [Fulib Scenarios README](https://github.com/fujaba/fulibScenarios/blob/master/README.md)
 for instructions on how to use the tool.
+
+> ⚠︎ In v0.4.0, there is a known issue that causes the build to fail
+> if the `src/main/scenarios` and `src/test/scenarios` directories do not exist.
+> The workaround is to create these directories.
+> You can leave them empty, but it is advisable to create an empty `.gitkeep` file within them.
+> This also avoids build failures on CI/CD systems like Travis CI.
