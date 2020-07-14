@@ -1,6 +1,7 @@
 # Fulib Gradle Plugin
 
 [![Build Status](https://travis-ci.org/fujaba/fulibGradle.svg?branch=master)](https://travis-ci.org/fujaba/fulibGradle)
+[![Java CI](https://github.com/fujaba/fulibTools/workflows/Java%20CI/badge.svg)](https://github.com/fujaba/fulibTools/actions)
 [![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/org/fulib/fulibGradle/org.fulib.fulibGradle.gradle.plugin/maven-metadata.xml.svg?colorB=blue&label=Gradle%20Plugin%20Portal)](https://plugins.gradle.org/plugin/org.fulib.fulibGradle)
 
 The Gradle plugin for the [Fulib Scenarios](https://github.com/fujaba/fulibScenarios) tool.
