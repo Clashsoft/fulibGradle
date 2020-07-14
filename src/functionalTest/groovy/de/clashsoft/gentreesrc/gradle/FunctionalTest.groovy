@@ -39,7 +39,7 @@ class FunctionalTest extends Specification {
 			try {
 				Files.createLink(target, source)
 			}
-			catch (UnsupportedOperationException ignored) {
+			catch (Exception ignored) {
 				Files.copy(source, target)
 			}
 		}
