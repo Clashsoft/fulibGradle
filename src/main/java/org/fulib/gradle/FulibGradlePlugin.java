@@ -26,6 +26,7 @@ public class FulibGradlePlugin implements Plugin<Project>
 	{
 		project.getPluginManager().apply(JavaPlugin.class);
 		applyFulibScenarios(project);
+		project.getExtensions().create("fulibGradle", FulibGradleExtension.class, project);
 	}
 
 	private static void applyFulibScenarios(Project project)
