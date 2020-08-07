@@ -19,6 +19,24 @@ class FulibGradlePluginTest {
 	}
 
 	@Test
+	void addsExtension() {
+		assertThat(project.fulibGradle, instanceOf(FulibGradleExtension))
+	}
+
+	@Test
+	void useGeneratedSourceDirectories() {
+		project.fulibGradle.useGeneratedSourceDirectories()
+		def mainDir = project.file("$project.buildDir/generated/sources/scenarios/main")
+		def testDir = project.file("$project.buildDir/generated/sources/scenarios/test")
+		assertThat(project.sourceSets.main.java.srcDirs, hasItem(mainDir))
+		assertThat(project.sourceSets.test.java.srcDirs, hasItem(testDir))
+		assertThat(project.tasks.generateScenarioSource.modelDirectory, equalTo(mainDir))
+		assertThat(project.tasks.generateScenarioSource.testDirectory, equalTo(testDir))
+		assertThat(project.tasks.generateTestScenarioSource.modelDirectory, equalTo(testDir))
+		assertThat(project.tasks.generateTestScenarioSource.testDirectory, equalTo(testDir))
+	}
+
+	@Test
 	void addsConfiguration() {
 		assertThat(project.configurations.fulibScenarios, notNullValue())
 		assertThat(project.configurations.genImplementation, notNullValue())
