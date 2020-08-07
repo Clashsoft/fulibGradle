@@ -46,11 +46,11 @@ class FunctionalTest extends Specification {
 	}
 
 	@CompileStatic
-	BuildResult run() {
+	BuildResult run(String... args) {
 		try {
 			BuildResult result = GradleRunner.create()
 					.withProjectDir(testProjectDir.root)
-					.withArguments('check')
+					.withArguments(args)
 					.withPluginClasspath()
 					.build()
 
@@ -69,7 +69,7 @@ class FunctionalTest extends Specification {
 
 	def generatesClasses() {
 		when:
-		def result = run()
+		def result = run('check')
 
 		then:
 		result.task(":check").outcome == SUCCESS
@@ -80,6 +80,24 @@ class FunctionalTest extends Specification {
 		new File(mainOutputDir, 'com/example2/Plane.java').exists()
 
 		def testOutputDir = new File(testProjectDir.root, "src/test/java/")
+		new File(testOutputDir, 'com/example/FooTest.java').exists()
+		new File(testOutputDir, 'org/example/BazTest.java').exists()
+		new File(testOutputDir, 'org/example/City.java').exists()
+	}
+
+	def generatesClassesWithGeneratedSource() {
+		when:
+		def result = run('check', '-PuseGeneratedSourceDirectories')
+
+		then:
+		result.task(":check").outcome == SUCCESS
+
+		def mainOutputDir = new File(testProjectDir.root, 'build/generated/sources/scenarios/main/')
+		new File(mainOutputDir, 'com/example/Car.java').exists()
+		new File(mainOutputDir, 'com/example/SuperCar.java').exists()
+		new File(mainOutputDir, 'com/example2/Plane.java').exists()
+
+		def testOutputDir = new File(testProjectDir.root, 'build/generated/sources/scenarios/test/')
 		new File(testOutputDir, 'com/example/FooTest.java').exists()
 		new File(testOutputDir, 'org/example/BazTest.java').exists()
 		new File(testOutputDir, 'org/example/City.java').exists()
