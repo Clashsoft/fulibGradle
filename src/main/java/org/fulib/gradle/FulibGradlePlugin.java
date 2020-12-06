@@ -34,16 +34,8 @@ public class FulibGradlePlugin implements Plugin<Project>
 		// configuration
 		final ConfigurationContainer configurations = project.getConfigurations();
 		configurations.register(CONFIGURATION_NAME, it -> {
-			it.setDescription("The Fulib Scenarios libraries to use for this project.");
+			it.setDescription("The fulibScenarios compiler and fulib dependencies.");
 			it.setVisible(false);
-			it.getResolutionStrategy().eachDependency(details -> {
-				final String version = details.getRequested().getVersion();
-				if (version == null)
-				{
-					details.useVersion("+");
-					details.because("latest version");
-				}
-			});
 		});
 
 		final SourceSetContainer sourceSets = project.getConvention().getPlugin(JavaPluginConvention.class)
