@@ -101,5 +101,9 @@ class FunctionalTest extends Specification {
 		new File(testOutputDir, 'com/example/FooTest.java').exists()
 		new File(testOutputDir, 'org/example/BazTest.java').exists()
 		new File(testOutputDir, 'org/example/City.java').exists()
+
+		def srcDir = new File(testProjectDir.root, 'src/main/scenarios')
+		new File(srcDir, 'com/example/example.html.png').exists()
+		new File(srcDir, 'com/example/example.html').exists()
 	}
 }
