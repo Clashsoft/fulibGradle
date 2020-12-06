@@ -4,9 +4,9 @@
 [![Java CI](https://github.com/fujaba/fulibTools/workflows/Java%20CI/badge.svg)](https://github.com/fujaba/fulibTools/actions)
 [![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/org/fulib/fulibGradle/org.fulib.fulibGradle.gradle.plugin/maven-metadata.xml.svg?colorB=blue&label=Gradle%20Plugin%20Portal)](https://plugins.gradle.org/plugin/org.fulib.fulibGradle)
 
-The Gradle plugin for the [Fulib Scenarios](https://github.com/fujaba/fulibScenarios) tool.
+The Gradle plugin for [fulib](https://github.com/fujaba/fulib) and the [fulibScenarios](https://github.com/fujaba/fulibScenarios) compiler.
 
-## Usage
+## Installation
 
 The plugin is available on the [Gradle Plugin Portal](https://plugins.gradle.org/plugin/org.fulib.fulibGradle)
 and can be installed via the `plugins` DSL in `build.gradle`:
@@ -20,11 +20,11 @@ plugins {
 }
 ```
 
-See the [Fulib Scenarios README](https://github.com/fujaba/fulibScenarios/blob/master/README.md)
-for instructions on how to use the tool.
+## Usage
 
-> ⚠︎ In v0.4.0, there is a known issue that causes the build to fail
-> if the `src/main/scenarios` and `src/test/scenarios` directories do not exist.
-> The workaround is to create these directories.
-> You can leave them empty, but it is advisable to create an empty `.gitkeep` file within them.
-> This also avoids build failures on CI/CD systems like Travis CI.
+The [fulibScenarios README](https://github.com/fujaba/fulibScenarios/blob/master/README.md) describes how to work with scenarios.
+Check out the [fulib README](https://github.com/fujaba/fulib/blob/master/README.md) to learn how to generate model code.
+
+## License
+
+[MIT](LICENSE.md)
