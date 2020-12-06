@@ -15,7 +15,7 @@ and can be installed via the `plugins` DSL in `build.gradle`:
 plugins {
     // ...
     id 'java'
-    id 'org.fulib.fulibGradle' version '0.4.0'
+    id 'org.fulib.fulibGradle' version '0.5.0'
     // ...
 }
 ```

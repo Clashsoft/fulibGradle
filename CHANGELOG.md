@@ -34,3 +34,14 @@
   W/A: Create the directory (it can be empty).
 - The `generateTestScenarioSource` task fails if the `src/test/scenarios` directory does not exist.
   W/A: Create the directory (it can be empty).
+
+# fulibGradle v0.5.0
+
+## New Features
+
++ Added an option to use generated source directories. #2 #9
++ fulibScenarios now uses the test compile classpath. #12
+
+## Improvements
+
+* The fulibScenarios version now needs to be specified explicitly. #13
