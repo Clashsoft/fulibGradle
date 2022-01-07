@@ -72,6 +72,7 @@ public class ScenariosTask extends DefaultTask
 	}
 
 	@InputFiles
+	@SkipWhenEmpty
 	public File getInputDirectory()
 	{
 		return this.inputDirectory;
