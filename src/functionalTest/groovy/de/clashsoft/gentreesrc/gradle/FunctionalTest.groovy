@@ -4,9 +4,8 @@ import groovy.io.FileType
 import groovy.transform.CompileStatic
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.TempDir
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -24,12 +23,12 @@ class FunctionalTest extends Specification {
 			'src/test/scenarios/org/example/Baz.md',
 	]
 
-	@Rule
-	TemporaryFolder testProjectDir = new TemporaryFolder()
+	@TempDir
+	File testProjectDir
 
 	@CompileStatic
 	void setup() {
-		final Path rootPath = testProjectDir.root.toPath()
+		final Path rootPath = testProjectDir.toPath()
 		for (final String fileName : TEST_FILES) {
 			final Path source = Paths.get("src/functionalTest/testfiles", fileName)
 			final Path target = rootPath.resolve(fileName)
@@ -49,7 +48,7 @@ class FunctionalTest extends Specification {
 	BuildResult run(String... args) {
 		try {
 			BuildResult result = GradleRunner.create()
-					.withProjectDir(testProjectDir.root)
+					.withProjectDir(testProjectDir)
 					.withArguments(args)
 					.withPluginClasspath()
 					.build()
@@ -60,7 +59,7 @@ class FunctionalTest extends Specification {
 			return result
 		}
 		finally {
-			testProjectDir.root.eachFileRecurse(FileType.FILES) {
+			testProjectDir.eachFileRecurse(FileType.FILES) {
 				println it
 			}
 			println "-" * 75
@@ -74,17 +73,17 @@ class FunctionalTest extends Specification {
 		then:
 		result.task(":check").outcome == SUCCESS
 
-		def mainOutputDir = new File(testProjectDir.root, "src/main/java/")
+		def mainOutputDir = new File(testProjectDir, 'src/main/java/')
 		new File(mainOutputDir, 'com/example/Car.java').exists()
 		new File(mainOutputDir, 'com/example/SuperCar.java').exists()
 		new File(mainOutputDir, 'com/example2/Plane.java').exists()
 
-		def testOutputDir = new File(testProjectDir.root, "src/test/java/")
+		def testOutputDir = new File(testProjectDir, 'src/test/java/')
 		new File(testOutputDir, 'com/example/FooTest.java').exists()
 		new File(testOutputDir, 'org/example/BazTest.java').exists()
 		new File(testOutputDir, 'org/example/City.java').exists()
 
-		def srcDir = new File(testProjectDir.root, 'src/main/scenarios')
+		def srcDir = new File(testProjectDir, 'src/main/scenarios')
 		new File(srcDir, 'com/example/example.html.png').exists()
 		new File(srcDir, 'com/example/example.html').exists()
 	}
@@ -96,17 +95,17 @@ class FunctionalTest extends Specification {
 		then:
 		result.task(":check").outcome == SUCCESS
 
-		def mainOutputDir = new File(testProjectDir.root, 'build/generated/sources/scenarios/main/')
+		def mainOutputDir = new File(testProjectDir, 'build/generated/sources/scenarios/main/')
 		new File(mainOutputDir, 'com/example/Car.java').exists()
 		new File(mainOutputDir, 'com/example/SuperCar.java').exists()
 		new File(mainOutputDir, 'com/example2/Plane.java').exists()
 
-		def testOutputDir = new File(testProjectDir.root, 'build/generated/sources/scenarios/test/')
+		def testOutputDir = new File(testProjectDir, 'build/generated/sources/scenarios/test/')
 		new File(testOutputDir, 'com/example/FooTest.java').exists()
 		new File(testOutputDir, 'org/example/BazTest.java').exists()
 		new File(testOutputDir, 'org/example/City.java').exists()
 
-		def srcDir = new File(testProjectDir.root, 'src/main/scenarios')
+		def srcDir = new File(testProjectDir, 'src/main/scenarios')
 		new File(srcDir, 'com/example/example.html.png').exists()
 		new File(srcDir, 'com/example/example.html').exists()
 	}
