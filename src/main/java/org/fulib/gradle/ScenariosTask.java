@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.gradle.util.RelativePathUtil.relativePath;
-
 public class ScenariosTask extends DefaultTask
 {
 	// =============== Fields ===============
@@ -245,7 +243,7 @@ public class ScenariosTask extends DefaultTask
 	public void copyTo(JavaExecSpec spec)
 	{
 		spec.setClasspath(this.getToolClasspath());
-		spec.setMain(FulibGradlePlugin.MAIN_CLASS_NAME);
+		spec.getMainClass().set(FulibGradlePlugin.MAIN_CLASS_NAME);
 
 		final List<String> args = new ArrayList<>(this.getExtraArgs());
 
@@ -300,6 +298,11 @@ public class ScenariosTask extends DefaultTask
 		args.add(relativePath(spec.getWorkingDir(), this.getInputDirectory()));
 
 		spec.setArgs(args);
+	}
+
+	private static String relativePath(File parent, File child)
+	{
+		return parent.toPath().relativize(child.toPath()).toString();
 	}
 
 	private List<String> getDecoratorClassNames()
