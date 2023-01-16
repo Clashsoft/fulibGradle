@@ -25,6 +25,25 @@ plugins {
 The [fulibScenarios README](https://github.com/fujaba/fulibScenarios/blob/master/README.md) describes how to work with scenarios.
 Check out the [fulib README](https://github.com/fujaba/fulib/blob/master/README.md) to learn how to generate model code.
 
+This plugin supports the following options for `ScenariosTask`s.
+The default values are shown.
+
+```gradle
+generateScenarioSource { // or generateTestScenarioSource, or custom task
+	tables = false // generates table class using fulibTables (https://github.com/fujaba/fulibTables)
+
+	classDiagram = false // generates a classDiagram.png alongside the model java files
+	classDiagramSVG = false // generates a classDiagram.svg alongside the model java files
+
+	objectDiagram = false // scenario tests automatically create object diagrams (png) at the end
+	objectDiagramSVG = false // see objectDiagram, but uses svg
+
+	dryRun = false // does not change any files on disk, only outputs compilation problems and warnings
+
+	extraArgs = [] // extra arguments to pass to the scenario compiler, can also be used like `extraArgs += ...`. See https://github.com/fujaba/fulibScenarios
+}
+```
+
 ## License
 
 [MIT](LICENSE.md)
